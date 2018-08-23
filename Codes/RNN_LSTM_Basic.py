@@ -2,7 +2,57 @@
 # coding: utf-8
 
 # In[ ]:
+# In[1]:
 
+ ## Part 1: Defining RNN in pytorch
+
+# ## RNN
+# 
+# ```python
+#    nn.RNN(input_size,hidden_size, num_layers, nonlinearity, bias, batch_first, dropout, bidirectional)
+# ```
+# 
+# 
+# - input_size – The number of expected features in the input x
+# - hidden_size – The number of features in the hidden state h
+# - num_layers – Number of recurrent layers. E.g., setting num_layers=2 would mean stacking two RNNs together to form a stacked RNN, with the second RNN taking in outputs of the first RNN and computing the final results. Default: 1
+# - nonlinearity – The non-linearity to use. Can be either ‘tanh’ or ‘relu’. Default: ‘tanh’
+# - bias – If False, then the layer does not use bias weights b_ih and b_hh. Default: True
+# - batch_first – If True, then the input and output tensors are provided as (batch, seq, feature). Default: False
+# - dropout – If non-zero, introduces a Dropout layer on the outputs of each RNN layer except the last layer, with dropout probability equal to dropout. Default: 0
+# - bidirectional – If True, becomes a bidirectional RNN. Default: False
+# 
+# 
+# The RNN model expect two inputs: 
+# - input data (x) of shape (seq_len, batch, input_size), 
+# - initial hidden state (h_0) of shape (num_layers * num_directions, batch, hidden_size)
+# 
+# It also return two output
+# - output of shape (seq_len, batch, num_directions * hidden_size): tensor containing the output features ($h_t$) from the last layer of the RNN, for each $t$. 
+# - h_n (num_layers * num_directions, batch, hidden_size): tensor containing the hidden state 
+
+
+# ## LSTM
+# 
+# ```python
+#    nn.LSTM(input_size,hidden_size, num_layers, bias, batch_first, dropout, bidirectional)
+# ```
+# 
+# - **Input**:  input, (h_0, c_0)
+# - **Output**: output, (h_n, c_n)
+# 
+# #### Example
+
+# #### Example
+# ## GRU
+# 
+# 
+# ```python
+#    nn.GRU(input_size,hidden_size, num_layers, bias, batch_first, dropout, bidirectional)
+# ```
+# 
+# - **Input**:  input, h_0
+# - **Output**: output, h_n
 
 #define data of size (batch, seq_len, dim)
 x = torch.randn(32, 60, 3)
@@ -39,34 +89,14 @@ class RNNmodel(nn.Module):
         return out[:,-1,:]
 
 
-# In[7]:
-
-
 rnn = RNNmodel(3, 64, 2, 1)
 
-
-# In[11]:
-
-
 out = rnn(x)
-
-
-# In[8]:
 
 
 out.shape
 
 
-# ## LSTM
-# 
-# ```python
-#    nn.LSTM(input_size,hidden_size, num_layers, bias, batch_first, dropout, bidirectional)
-# ```
-# 
-# - **Input**:  input, (h_0, c_0)
-# - **Output**: output, (h_n, c_n)
-# 
-# #### Example
 
 # In[9]:
 
@@ -84,9 +114,6 @@ output, (h_n, c_n) = lstm(x, (h_0, c_0))
 
 # #### LSTM class
 
-# In[10]:
-
-
 class LSTMmodel(nn.Module):
     def __init__(self, in_dim, hidden_size, layer_size, out_dim):
         super(LSTMmodel, self).__init__()
@@ -102,10 +129,6 @@ class LSTMmodel(nn.Module):
         out, _ = self.rnn(x, (h_0, c_0))
         out = torch.sigmoid(self.fc(out))
         return out[:,-1,:]
-
-
-# In[11]:
-
 
 lstm = LSTMmodel(3, 64, 2, 1)
 out = lstm(x)
